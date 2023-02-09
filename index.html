@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Vamshi fitness</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<style>
+	body{
+		font-family:initial;
+		font-weight: bold;
+		color: white;
+		margin: 0px;
+		padding: 0px;
+        background-image: url("bg.jpg");
+   
+	}
+	.left{
+		position: absolute;
+		left: 34px;
+		top: 20px;
+		/*border: 2px solid red;*/
+		display:inline-block;
+
+	}.left img{
+		width: 100px;
+		height: 60px;
+		filter: invert(100%);
+	}
+	.left div{
+		text-align: center;
+		font-size: 18px;
+		line-height: 8px;
+	}
+	.mid{
+		/*border: 2px solid red;*/
+		display: block;
+		width: 33%;
+		margin: 5px auto;
+        right: 500px;
+        color: #EC4141;
+        
+	}
+	.right{
+		position: absolute;
+		right: 34px;
+		top: 20px;
+		/*border: 2px solid red;*/
+		display: inline-block;
+
+	}
+	.navbar{
+		display: inline-block;
+		
+	}
+	.navbar li{
+		display: inline-block;
+		font-size: 19px;
+		
+	}
+	.navbar li a{
+		color: white;
+		text-decoration: none;
+		padding: 60px 40px;
+	}
+	.navbar li a:hover,.navbar li a.action{
+	
+		text-decoration: underline;
+	color: darkgrey;
+	}
+	.btn{
+		font-family:initial;
+		font-weight: bold;
+		margin: 0px 9px;
+		color: white;
+		background-color: black;
+		padding: 4px 14px;
+		border: 2px solid grey;
+		border-radius: 10px;
+		font-size: 20px;
+		cursor: pointer;
+	}
+	.btn:hover{
+		background-color: rgb(31, 30, 30);
+
+
+	}
+	.container{
+		border: 2px solid white;
+		width: 20%;
+		margin: 111px 31px;
+		padding: 80px;
+		border-radius: 10px;
+
+	}
+	.form-grp input{
+		text-align: center;
+		display: block;
+		width: 200px;
+		padding: 1px;
+		border: 2px solid black;
+		margin: 12px auto;
+		border-radius: 6px;
+		font-family: initial;
+	}
+	.container button{
+		display: block;
+		width: 200px;
+		text-align: center;
+		margin: auto;
+	}
+
+    .container h1{
+		text-align: center;
+	}
+
+	.container h2{
+		margin: 12px auto;
+	}
+</style>
+<body>
+	<header class="header">
+	<div class="left">
+		<img src="Logo.png">
+		<div>Vamshi Fitness</div>
+	</div>
+	<div class="mid">
+		<ul class="navbar">
+			<li><a href="#">Home</a></li>
+			<li><a href="#">About us</a></li>
+			<li><a href="#">Fitness calculator</a></li>
+			<li><a href="#">contact us</a></li>
+		</ul>
+   </div>
+   <div class="right">
+     <button class="btn">call us</button>
+     <button class="btn">email us</button>
+   </div>	
+	</header>
+	<div class="container">
+		<h2>Join the best gym Now!</h2>
+		
+		<form action="noaction.php">
+			<div class="form-grp">
+				<input type="text" name="" placeholder="Enter your Name">
+			</div>
+			<div class="form-grp">
+				<input type="text" name="" placeholder="Enter your Age">
+			</div>
+			<div class="form-grp">
+				<input type="text" name="" placeholder="Enter your Gender">
+			</div>
+			<div class="form-grp">
+				<input type="text" name="" placeholder="Enter your Locality">
+			</div>
+			<button class="btn">Submit</button>
+		</form>
+	</div>
+</body>
+</html>
