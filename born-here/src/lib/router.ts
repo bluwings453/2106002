@@ -2,12 +2,12 @@ import { useEffect, useState } from 'react'
 
 export type Route = { page: 'home' } | { page: 'about' } | { page: 'state'; slug: string }
 
+// Plain one-word hashes (#about, #telangana) so links survive any static host.
 function parse(hash: string): Route {
-  const h = hash.replace(/^#\/?/, '')
-  const parts = h.split('/').filter(Boolean)
-  if (parts[0] === 'about') return { page: 'about' }
-  if (parts[0] === 'state' && parts[1]) return { page: 'state', slug: decodeURIComponent(parts[1]) }
-  return { page: 'home' }
+  const h = decodeURIComponent(hash.replace(/^#\/?/, '')).replace(/^state\//, '')
+  if (!h) return { page: 'home' }
+  if (h === 'about') return { page: 'about' }
+  return { page: 'state', slug: h }
 }
 
 export function useRoute(): Route {
@@ -24,7 +24,7 @@ export function useRoute(): Route {
 }
 
 export const href = {
-  home: '#/',
-  about: '#/about',
-  state: (slug: string) => `#/state/${slug}`,
+  home: '#',
+  about: '#about',
+  state: (slug: string) => `#${slug}`,
 }

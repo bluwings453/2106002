@@ -68,6 +68,8 @@ function Loaded({ slug, name, topo, rows }: { slug: string; name: string; topo: 
   const [searchMsg, setSearchMsg] = useState('')
   const [suggestFor, setSuggestFor] = useState<string | null>(null)
   const [exporting, setExporting] = useState(false)
+  const [poster, setPoster] = useState<{ url: string; filename: string } | null>(null)
+  const [exportErr, setExportErr] = useState('')
 
   const filled = layout.shapes.filter((s) => people.get(norm(s.name))?.person).length
   const activeShape = active != null ? layout.shapes[active] : null
@@ -210,15 +212,28 @@ function Loaded({ slug, name, topo, rows }: { slug: string; name: string; topo: 
                 const svg = mapRef.current?.svg()
                 if (!svg) return
                 setExporting(true)
+                setExportErr('')
                 try {
-                  await exportMapPng(svg, name, `Birthplaces mapped to present-day districts${filter ? ` · ${filter}` : ''}`)
+                  const out = await exportMapPng(svg, name, `Birthplaces mapped to present-day districts${filter ? ` · ${filter}` : ''}`)
+                  setPoster(out)
+                  // Try a direct download too; some embedded viewers block it, so the preview stays open either way.
+                  try {
+                    const a = document.createElement('a')
+                    a.href = out.url
+                    a.download = out.filename
+                    document.body.appendChild(a)
+                    a.click()
+                    a.remove()
+                  } catch {
+                    /* preview modal covers this */
+                  }
                 } catch (e) {
-                  alert(String(e))
+                  setExportErr(`Couldn’t create the image: ${String(e)}`)
                 } finally {
                   setExporting(false)
                 }
               }}
-              className="inline-flex items-center gap-2 rounded-full border border-white/15 px-4 py-2 text-sm font-medium text-neutral-200 hover:border-white/40 disabled:opacity-50"
+              className="inline-flex items-center gap-2 rounded-full border border-white/15 px-4 py-2 text-sm font-semibold text-neutral-200 hover:border-white/40 disabled:opacity-50"
             >
               <svg viewBox="0 0 20 20" className="size-4" fill="none" stroke="currentColor" strokeWidth="1.8">
                 <path d="M10 3v10m0 0l-4-4m4 4l4-4M4 16h12" />
@@ -226,6 +241,7 @@ function Loaded({ slug, name, topo, rows }: { slug: string; name: string; topo: 
               {exporting ? 'Preparing…' : 'Download as image'}
             </button>
           </div>
+          {exportErr && <p className="mt-2 text-right text-xs text-[#f6c9cc]">{exportErr}</p>}
         </div>
 
         {isDesktop && (
@@ -237,6 +253,22 @@ function Loaded({ slug, name, topo, rows }: { slug: string; name: string; topo: 
         <div className="fixed inset-x-0 bottom-0 z-40 max-h-[58vh] overflow-y-auto rounded-t-3xl border-t border-white/10 bg-panel p-5 pb-[max(1.25rem,env(safe-area-inset-bottom))] shadow-[0_-20px_60px_rgba(0,0,0,0.6)]">
           <div className="mx-auto mb-4 h-1 w-10 rounded-full bg-white/20" aria-hidden />
           <div className="mx-auto max-w-lg">{panel}</div>
+        </div>
+      )}
+
+      {poster && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4 backdrop-blur-sm" onClick={() => setPoster(null)}>
+          <div className="flex max-h-full w-full max-w-3xl flex-col gap-3 overflow-y-auto rounded-3xl border border-white/10 bg-[#141414] p-4" onClick={(e) => e.stopPropagation()} role="dialog" aria-modal="true" aria-label="Map image">
+            <div className="flex items-center justify-between gap-3">
+              <p className="text-sm text-neutral-300">
+                <span className="font-semibold text-white">Your map image.</span> If the download didn’t start, right-click or long-press the image and save it.
+              </p>
+              <button onClick={() => setPoster(null)} className="shrink-0 rounded-full bg-white px-4 py-1.5 text-sm font-semibold text-black">
+                Close
+              </button>
+            </div>
+            <img src={poster.url} alt={`Poster: the most famous person born in every district of ${name}`} className="w-full rounded-xl" />
+          </div>
         </div>
       )}
 

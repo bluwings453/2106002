@@ -13,7 +13,8 @@ Stack: React, Vite, TypeScript, Tailwind v4, d3-geo / d3-zoom and topojson. Ther
 ```sh
 npm install
 npm run dev      # local dev
-npm run build    # static site in dist/ (works from any sub-path)
+npm run build    # one self-contained dist/index.html plus dist/geo and dist/data JSON
+python3 scripts/to-artifact.py dist/index.html dist/artifact.html   # body-only page for claude.ai Artifacts
 ```
 
 ## Data

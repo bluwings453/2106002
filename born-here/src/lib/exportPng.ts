@@ -28,8 +28,8 @@ function getFontCss() {
 
 const esc = (s: string) => s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]!)
 
-/** Export the live map SVG as a poster-style PNG. */
-export async function exportMapPng(svg: SVGSVGElement, stateName: string, subtitle: string) {
+/** Render the live map SVG as a poster-style PNG; returns an object URL for it. */
+export async function exportMapPng(svg: SVGSVGElement, stateName: string, subtitle: string): Promise<{ url: string; filename: string }> {
   const vb = svg.viewBox.baseVal
   const pad = 48
   const head = 150
@@ -69,13 +69,7 @@ export async function exportMapPng(svg: SVGSVGElement, stateName: string, subtit
     ctx.scale(scale, scale)
     ctx.drawImage(img, 0, 0, W, H)
     const blob: Blob = await new Promise((res, rej) => canvas.toBlob((b) => (b ? res(b) : rej(new Error('PNG failed'))), 'image/png'))
-    const a = document.createElement('a')
-    a.href = URL.createObjectURL(blob)
-    a.download = `born-here-${stateName.toLowerCase().replace(/\s+/g, '-')}.png`
-    document.body.appendChild(a)
-    a.click()
-    a.remove()
-    setTimeout(() => URL.revokeObjectURL(a.href), 2000)
+    return { url: URL.createObjectURL(blob), filename: `born-here-${stateName.toLowerCase().replace(/\s+/g, '-')}.png` }
   } finally {
     URL.revokeObjectURL(url)
   }

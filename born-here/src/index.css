@@ -11,6 +11,7 @@
   --color-lavender: #dcc8f2;
 }
 
+:root { color-scheme: dark; }
 html, body, #root { min-height: 100%; }
 body {
   background: #0b0b0b;
